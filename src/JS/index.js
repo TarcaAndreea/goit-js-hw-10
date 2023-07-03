@@ -38,11 +38,15 @@ function selectEvent(e) {
     .then(catData => {
       catInfo.style.visibility = 'visible';
       loading.style.visibility = 'hidden';
-      const { name, description, temperament } = catData.data[0].breeds[0];
-      const { url } = catData.data[0].url;
+      if (catData.data && catData.data.length > 0) {
+        const { name, description, temperament } = catData.data[0].breeds[0];
+        const { url } = catData.data[0];
 
-      const markup = createMarkup(name, description, temperament, url);
-      updateCatInfo(markup);
+        const markup = createMarkup(name, description, temperament, url);
+        updateCatInfo(markup);
+      } else {
+        throw new Error('No data found for the specified breed.');
+      }
     })
     .catch(err => {
       errorMessage.style.visibility = 'visible';
@@ -58,8 +62,8 @@ function updateCatInfo(markup) {
   catInfo.innerHTML = markup;
   catInfo.style.visibility = 'visible';
   const catImage = document.getElementById('catImage');
-  catImage.style.width = '400px';
-  catImage.style.height = '300px';
+  catImage.style.width = '500px';
+  catImage.style.height = '400px';
 }
 
 function createMarkup(name, description, temperament, url) {
